@@ -78,24 +78,11 @@ public class HexRecordReader implements Closeable {
             return null;
         }
         try {
-            // step 1: seek forward to next "record start marker" (:)
-            while (true) {
-                int c = stream.read();
-                if (c == -1) {
-                    // normal stream termination -> no more blocks
-                    state = State.COMPLETED;
-                    return null;
-                }
-                if (c == ':') {
-                    break;
-                }
+            HexRecord result = doRead();
+            if (result == null) {
+                state = State.COMPLETED;
             }
-            // step 2: read block data
-            int length = readHexEncodedByte();
-            int[] rawData = readHexEncodedBytes(length + 4);
-
-            // step 3: validate and block
-            return validateAndBuildBlock(length, rawData);
+            return result;
         } catch (IOException e) {
             state = State.IO_ERROR;
             throw e;
@@ -103,6 +90,26 @@ public class HexRecordReader implements Closeable {
             state = State.PARSING_ERROR;
             throw e;
         }
+    }
+
+    private HexRecord doRead() throws IOException {
+        // step 1: seek forward to next "record start marker" (:)
+        while (true) {
+            int c = stream.read();
+            if (c == -1) {
+                // normal stream termination -> no more blocks
+                return null;
+            }
+            if (c == ':') {
+                break;
+            }
+        }
+        // step 2: read block data
+        int length = readHexEncodedByte();
+        int[] rawData = readHexEncodedBytes(length + 4);
+
+        // step 3: validate and block
+        return validateAndBuildBlock(length, rawData);
     }
 
     private static HexRecord validateAndBuildBlock(int length, int[] rawData) {
