@@ -11,6 +11,7 @@ import java.util.Objects;
 /**
  * A representation of a binary data file with a size of up to 65536 bytes (16-bit address space).
  *
+ * @author Andreas Wälchli
  * @since 0.1.0
  */
 public class BinaryFile implements Iterable<DataFragment> {
@@ -38,7 +39,7 @@ public class BinaryFile implements Iterable<DataFragment> {
      * Creates a new file with a size limit of 65536 bytes and initializes it with the provided fragments.
      *
      * @param fragments the fragments to add
-     * @throws IllegalStateException if any of the fragments are "colliding" with each other
+     * @throws IllegalStateException if any of the fragments are "colliding" with each other.
      */
     public BinaryFile(@NotNull List<@NotNull DataFragment> fragments) {
         this(65536, fragments);
@@ -49,8 +50,8 @@ public class BinaryFile implements Iterable<DataFragment> {
      *
      * @param sizeLimit the max size of the file. must be between 1 and 65536.
      * @param fragments the fragments to add
-     * @throws IllegalStateException     if any of the fragments are "colliding" with each other
-     * @throws IndexOutOfBoundsException if any fragment does not fit into this file
+     * @throws IllegalStateException     if any of the fragments are "colliding" with each other.
+     * @throws IndexOutOfBoundsException if any fragment does not fit into this file.
      */
     public BinaryFile(int sizeLimit, @NotNull List<@NotNull DataFragment> fragments) {
         this(sizeLimit);
@@ -76,8 +77,8 @@ public class BinaryFile implements Iterable<DataFragment> {
      * Puts the data contained in the given fragment into this file.
      *
      * @param fragment the fragment to add to the file. may not be null
-     * @throws IllegalStateException     if any data in the fragment collides with data already present in the file
-     * @throws IndexOutOfBoundsException if the fragment does not fit into this file
+     * @throws IllegalStateException     if any data in the fragment collides with data already present in the file.
+     * @throws IndexOutOfBoundsException if the fragment does not fit into this file.
      */
     public void addFragment(@NotNull DataFragment fragment) {
         Objects.requireNonNull(fragment, "fragment must not be null");
@@ -154,7 +155,7 @@ public class BinaryFile implements Iterable<DataFragment> {
         return fragments;
     }
 
-    private static DataFragment buildFragment(int start, @NotNull List<@NotNull Byte> data) {
+    private static @NotNull DataFragment buildFragment(int start, @NotNull List<@NotNull Byte> data) {
         byte[] bytes = new byte[data.size()];
         for (int i = 0; i < data.size(); i++) {
             bytes[i] = data.get(i);
@@ -178,7 +179,7 @@ public class BinaryFile implements Iterable<DataFragment> {
      * @see #iterator(int)
      */
     @Override
-    public @NotNull Iterator<DataFragment> iterator() {
+    public @NotNull Iterator<@NotNull DataFragment> iterator() {
         return new BinaryFileIterator(this, 64);
     }
 
@@ -195,7 +196,7 @@ public class BinaryFile implements Iterable<DataFragment> {
      * @param stepSize the step size. must be larger than 0.
      * @return a new iterator
      */
-    public @NotNull Iterator<DataFragment> iterator(int stepSize) {
+    public @NotNull Iterator<@NotNull DataFragment> iterator(int stepSize) {
         if (stepSize < 1) {
             throw new IllegalArgumentException("stepSize must be greater than zero");
         }

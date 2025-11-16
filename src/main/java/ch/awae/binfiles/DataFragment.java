@@ -1,5 +1,6 @@
 package ch.awae.binfiles;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.Objects;
 /**
  * A continuous block of binary data with an absolute position in the address space.
  *
+ * @author Andreas Wälchli
  * @since 0.1.0
  */
 @SuppressWarnings("ClassCanBeRecord")
@@ -57,6 +59,7 @@ public class DataFragment {
      *
      * @return a copy of the fragments data
      */
+    @Contract("-> new")
     public byte @NotNull [] getData() {
         return Arrays.copyOf(data, data.length);
     }

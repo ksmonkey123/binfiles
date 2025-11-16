@@ -3,6 +3,7 @@ package ch.awae.binfiles.hex;
 import ch.awae.binfiles.BinaryFile;
 import ch.awae.binfiles.DataFragment;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,6 +17,9 @@ import java.util.Objects;
  * <p>
  * The reader follows the <a href="https://archive.org/details/IntelHEXStandard">Intel Hexadecimal Object File Format Specification</a>.
  * At the moment, only type 0 (data) and type 1 (end of file) records are supported.
+ *
+ * @author Andreas Wälchli
+ * @since 0.1.0
  */
 public class HexFileReader implements Closeable {
 
@@ -30,19 +34,17 @@ public class HexFileReader implements Closeable {
      * @param reader the record reader to read from. may not be null.
      */
     public HexFileReader(@NotNull HexRecordReader reader) {
-        Objects.requireNonNull(reader, "reader may not be null");
-        this.recordReader = reader;
+        this.recordReader = Objects.requireNonNull(reader, "reader may not be null");
     }
 
     /**
      * Creates a new reader instance
      *
      * @param stream the input stream to read from. may not be null.
-     * @implNote a {@link HexRecordReader} is constructed internally.
+     * @implNote A {@link HexRecordReader} is constructed internally.
      */
     public HexFileReader(@NotNull InputStream stream) {
-        Objects.requireNonNull(stream, "stream may not be null");
-        this.recordReader = new HexRecordReader(stream);
+        this.recordReader = new HexRecordReader(Objects.requireNonNull(stream, "stream may not be null"));
     }
 
     /**
@@ -65,7 +67,7 @@ public class HexFileReader implements Closeable {
      * @throws IOException             if any I/O exception occurs in the underlying stream, or if this reader has already been closed.
      * @throws HexFileParsingException if any parsing error occurs
      **/
-    public BinaryFile read() throws IOException {
+    public @Nullable BinaryFile read() throws IOException {
         if (status == Status.COMPLETED) {
             return null;
         }
@@ -144,6 +146,11 @@ public class HexFileReader implements Closeable {
         }
     }
 
+    /**
+     * Closes the underlying stream.
+     *
+     * @throws IOException if any I/O exception occurs in the underlying stream.
+     */
     @Override
     public void close() throws IOException {
         if (status != Status.CLOSED) {

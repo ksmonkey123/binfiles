@@ -15,7 +15,9 @@ import java.util.Objects;
  * @param type    the 1-byte type field of the record
  * @param address the 2-byte address field of the record
  * @param data    the 0-255 data bytes of the record
+ * @author Andreas Wälchli
  * @see <a href="https://archive.org/details/IntelHEXStandard">Intel Hexadecimal Object File Format Specification</a>
+ * @since 0.1.0
  */
 public record HexRecord(int type, int address, byte[] data) {
 
@@ -27,7 +29,7 @@ public record HexRecord(int type, int address, byte[] data) {
      * @param data    The data block. Length: 0-255. May not be null
      * @implNote The provided data array is copied to ensure immutability of the newly created instance.
      */
-    public HexRecord(int type, int address, byte[] data) {
+    public HexRecord(int type, int address, byte @NotNull [] data) {
         if (type < 0 || type > 255) {
             throw new IllegalArgumentException("invalid value for type field, must be between 0 and 255");
         }

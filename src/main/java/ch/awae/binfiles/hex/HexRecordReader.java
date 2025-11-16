@@ -1,6 +1,7 @@
 package ch.awae.binfiles.hex;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -11,6 +12,9 @@ import java.util.Objects;
  * Reader for reading {@link HexRecord}s from an {@link InputStream}.
  * <p>
  * The reader follows the <a href="https://archive.org/details/IntelHEXStandard">Intel Hexadecimal Object File Format Specification</a>.
+ *
+ * @author Andreas Wälchli
+ * @since 0.1.0
  */
 public class HexRecordReader implements Closeable {
 
@@ -64,7 +68,7 @@ public class HexRecordReader implements Closeable {
      * @throws IOException               if any I/O exception occurs in the underlying stream, or if this reader has already been closed.
      * @throws HexRecordParsingException if any parsing error occurs
      **/
-    public HexRecord readNext() throws IOException {
+    public @Nullable HexRecord readNext() throws IOException {
         if (state == State.CLOSED) {
             throw new IOException("reader already closed");
         }

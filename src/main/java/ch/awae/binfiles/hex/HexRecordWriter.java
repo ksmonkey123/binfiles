@@ -15,6 +15,9 @@ import java.util.Objects;
  * <p>
  * The reader follows the <a href="https://archive.org/details/IntelHEXStandard">Intel Hexadecimal Object File Format Specification</a>.
  * After writing a single record, a customizable separator string (e.g. a line-break) can be written to the stream.
+ *
+ * @author Andreas Wälchli
+ * @since 0.1.0
  */
 public class HexRecordWriter implements Closeable {
 
