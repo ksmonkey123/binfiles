@@ -2,6 +2,7 @@ package ch.awae.binfiles.hex;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -143,5 +144,19 @@ public class HexRecordReaderTest {
     @Test
     public void testReaderInitNullStream() {
         assertThrows(NullPointerException.class, () -> new HexRecordReader(null));
+    }
+
+    @Test
+    public void testReadingSingleRecord() throws IOException {
+        InputStream stream = new ByteArrayInputStream(":0812340001020304050607088E".getBytes());
+        HexRecordReader reader = new HexRecordReader(stream);
+        HexRecord record = reader.readNext();
+
+        assertEquals(0, record.type());
+        assertEquals(0x1234, record.address());
+        assertEquals(8, record.data().length);
+        for (int i = 0; i < 8; i++) {
+            assertEquals(i + 1, record.data()[i]);
+        }
     }
 }
