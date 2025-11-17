@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HexFormat;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,8 @@ import java.util.Objects;
 public class HexRecordReader implements Closeable {
 
     enum State {VALID, COMPLETED, CLOSED, IO_ERROR, PARSING_ERROR}
+
+    private static final HexFormat HEX_FORMAT = HexFormat.of();
 
     private final InputStream stream;
     private State state = State.VALID;
@@ -108,15 +112,20 @@ public class HexRecordReader implements Closeable {
                 break;
             }
         }
-        // step 2: read block data
-        int length = readHexEncodedByte();
-        int[] rawData = readHexEncodedBytes(length + 4);
+        try {
+            // step 2: read block data
+            int length = HEX_FORMAT.parseHex(readChars(2))[0] & 0xff;
+            byte[] rawData = HEX_FORMAT.parseHex(readChars(2 * length + 8));
 
-        // step 3: validate and block
-        return validateAndBuildBlock(length, rawData);
+            // step 3: validate and block
+            return validateAndBuildBlock(length, rawData);
+        } catch (NumberFormatException e) {
+            throw new HexRecordParsingException("parsing error: " + e.getMessage());
+        }
+
     }
 
-    private static HexRecord validateAndBuildBlock(int length, int[] rawData) {
+    private static HexRecord validateAndBuildBlock(int length, byte[] rawData) {
         // verify checksum
         int sum = length;
         for (int x : rawData) {
@@ -128,54 +137,19 @@ public class HexRecordReader implements Closeable {
         }
 
         // checksum ok, construct block
-        int address = (rawData[0] << 8) | rawData[1];
-        int type = rawData[2];
+        int address = ((rawData[0] & 0xff) << 8) | (rawData[1] & 0xff);
+        int type = rawData[2] & 0xff;
 
         byte[] data = new byte[length];
-        for (int i = 0; i < length; i++) {
-            data[i] = (byte) rawData[i + 3];
-        }
+        System.arraycopy(rawData, 3, data, 0, length);
         return new HexRecord(type, address, data);
     }
 
-    private int[] readHexEncodedBytes(int count) throws IOException {
-        int[] buffer = new int[count];
-        for (int i = 0; i < count; i++) {
-            buffer[i] = readHexEncodedByte();
+    private String readChars(int n) throws IOException {
+        byte[] bytes = stream.readNBytes(n);
+        if (bytes.length != n) {
+            throw new HexRecordParsingException("unexpected end of stream");
         }
-        return buffer;
+        return new String(bytes, StandardCharsets.US_ASCII);
     }
-
-    private int readHexEncodedByte() throws IOException {
-        int high = stream.read();
-        int low = stream.read();
-        if (high == -1 || low == -1) {
-            throw new HexRecordParsingException("unexpected EOS");
-        }
-
-        return (hexCharToInt(high) << 4) + hexCharToInt(low);
-    }
-
-    private static int hexCharToInt(int hexChar) {
-        return switch (hexChar) {
-            case '0' -> 0;
-            case '1' -> 1;
-            case '2' -> 2;
-            case '3' -> 3;
-            case '4' -> 4;
-            case '5' -> 5;
-            case '6' -> 6;
-            case '7' -> 7;
-            case '8' -> 8;
-            case '9' -> 9;
-            case 'A' -> 10;
-            case 'B' -> 11;
-            case 'C' -> 12;
-            case 'D' -> 13;
-            case 'E' -> 14;
-            case 'F' -> 15;
-            default -> throw new HexRecordParsingException("unable to parse char as hex: " + ((char) hexChar));
-        };
-    }
-
 }
