@@ -31,7 +31,7 @@ public class BinaryFile implements Iterable<DataFragment> {
      *
      * @param sizeLimit the max size of the file. must be between 1 and 65536.
      */
-    BinaryFile(int sizeLimit) {
+    public BinaryFile(int sizeLimit) {
         this.content = new Content(sizeLimit);
     }
 
