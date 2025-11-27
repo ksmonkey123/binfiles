@@ -3,23 +3,19 @@ package ch.awae.binfiles;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BinaryFileIteratorTest {
+public class BinaryFileFragmentIteratorTest {
 
     @Test
     public void testStandardIterator() {
         BinaryFile file = buildFile();
 
         // evaluate
-        List<@NotNull DataFragment> fragments = new ArrayList<>();
-        for (@NotNull DataFragment frag : file) {
-            fragments.add(frag);
-        }
+        List<@NotNull DataFragment> fragments = file.fragments(64).toList();
 
         assertEquals(5, fragments.size());
         assertEquals(64, fragments.get(0).getPosition());
@@ -64,7 +60,7 @@ public class BinaryFileIteratorTest {
             file.addByte(i, (byte) i);
         }
 
-        Iterator<DataFragment> iter = file.iterator(64);
+        Iterator<DataFragment> iter = file.fragments(64).iterator();
 
         assertTrue(iter.hasNext());
         DataFragment fragment = iter.next();

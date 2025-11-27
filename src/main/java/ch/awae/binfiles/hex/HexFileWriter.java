@@ -50,7 +50,7 @@ public class HexFileWriter implements Closeable {
      * @throws IOException if an I/O exception occurs in the underlying stream.
      * @implNote While the maximum record length is 16, no effort is expended to determine the smallest number records
      * required to write the entire file. The records that are written are calculated directly from the {@link DataFragment}s
-     * returned by iterating over the file with an iterator with step size 16. (see {@link BinaryFile#iterator(int)})
+     * returned by iterating over the file with an iterator with step size 16. (see {@link BinaryFile#fragments(int)})
      */
     public void write(@NotNull BinaryFile file) throws IOException {
         write(file, 16);
@@ -64,16 +64,15 @@ public class HexFileWriter implements Closeable {
      * @throws IOException if an I/O exception occurs in the underlying stream.
      * @implNote While the maximum record length is definable, no effort is expended to determine the smallest number records
      * required to write the entire file. The records that are written are calculated directly from the {@link DataFragment}s
-     * returned by iterating over the file with an iterator with the corresponding step size. (see {@link BinaryFile#iterator(int)})
+     * returned by iterating over the file with an iterator with the corresponding step size. (see {@link BinaryFile#fragments(int)})
      */
     public void write(@NotNull BinaryFile file, int recordLength) throws IOException {
         if (recordLength < 1 || recordLength > 255) {
             throw new IllegalArgumentException("record length must be between 1 and 255");
         }
         // write records
-        Iterator<DataFragment> iterator = file.iterator(recordLength);
-        while (iterator.hasNext()) {
-            writeFragment(iterator.next());
+        for (DataFragment fragment : file.fragments(recordLength)) {
+            writeFragment(fragment);
         }
         // write "EOF" record
         writer.write(new HexRecord(1, 0, new byte[0]));

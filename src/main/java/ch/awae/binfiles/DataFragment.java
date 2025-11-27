@@ -8,6 +8,9 @@ import java.util.Objects;
 
 /**
  * A continuous block of binary data with an absolute position in the address space.
+ * <p>
+ * A {@code DataFragment} is different from a {@link DataSlice} in that a {@code DataFragment} must be continuous
+ * (i.e. may not contain any gaps), while a{@code DataSlice} may be discontinuous. (i.e. may contain "gaps")
  *
  * @author Andreas Wälchli
  * @since 0.1.0

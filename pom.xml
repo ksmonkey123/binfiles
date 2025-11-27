@@ -6,7 +6,7 @@
 
     <groupId>ch.awae</groupId>
     <artifactId>binfiles</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
 
     <name>binfiles</name>
     <description>Utility Package for reading, processing and writing .bin and .hex files</description>

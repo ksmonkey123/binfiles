@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +13,7 @@ import java.util.Objects;
  * @author Andreas Wälchli
  * @since 0.1.0
  */
-public class BinaryFile implements Iterable<DataFragment> {
+public class BinaryFile {
 
     private final @NotNull Content content;
     private int currentSize = 0;
@@ -162,8 +161,9 @@ public class BinaryFile implements Iterable<DataFragment> {
      * @param start  starting address of the memory space to extract
      * @param length length of the memory space to extract. must be larger than 0.
      * @throws IndexOutOfBoundsException if the memory space is "invalid" (any byte outside the range of this file)
+     * @since 0.2.0
      */
-    public @NotNull List<@Nullable Byte> getRangeOfBytes(int start, int length) {
+    public @NotNull DataSlice getSlice(int start, int length) {
         if (length < 1) {
             throw new IllegalArgumentException("length must be greater than zero");
         }
@@ -176,7 +176,7 @@ public class BinaryFile implements Iterable<DataFragment> {
             buffer.add(content.getOrNull(start + i));
         }
 
-        return buffer;
+        return new DataSlice(start, buffer);
     }
 
     private static @NotNull DataFragment buildFragment(int start, @NotNull List<@NotNull Byte> data) {
@@ -197,20 +197,9 @@ public class BinaryFile implements Iterable<DataFragment> {
     }
 
     /**
-     * Returns an iterator with a step size of 64.
-     *
-     * @return a new iterator
-     * @see #iterator(int)
-     */
-    @Override
-    public @NotNull Iterator<DataFragment> iterator() {
-        return new BinaryFileIterator(this, 64);
-    }
-
-    /**
-     * Returns an iterator with a custom step size.
+     * Returns an iterable "projection" of this file, that separates the file into continuous data fragments.
      * <p>
-     * The iterator goes over the file with the set step size.
+     * The provided iterator goes over the file with the set step size.
      * If one "slice" is not representable in a single fragment, the iterator will provide multiple smaller fragments
      * for the same "slice".
      * <p>
@@ -218,30 +207,32 @@ public class BinaryFile implements Iterable<DataFragment> {
      * by one.
      *
      * @param stepSize the step size. must be larger than 0.
-     * @return a new iterator
+     * @since 0.2.0
      */
-    public @NotNull Iterator<DataFragment> iterator(int stepSize) {
+    public BinaryFileProjection<DataFragment> fragments(int stepSize) {
         if (stepSize < 1) {
             throw new IllegalArgumentException("stepSize must be greater than zero");
         }
-        return new BinaryFileIterator(this, stepSize);
+        return new BinaryFileProjection<>(() -> new BinaryFileFragmentIterator(this, stepSize));
     }
 
     /**
-     * Returns an iterator iterating over address ranges. Instead of continuous fragments, like {@link #iterator(int)},
-     * this iterator provides a list of nullable bytes.
+     * Returns an iterable "projection" of this file that separates the file into "slices" of a fixed size.
      * <p>
-     * Internally the iterator calls {@link #getRangeOfBytes(int, int)} repeatedly an returns the resulting lists one by
-     * one.
+     * The provided iterator goes over the file with the set step size.
+     * For each "slice" a list is returned that contains the bytes of that address range. Any byte that is not set is
+     * represented by a {@code null} value in the list.
+     * <p>
+     * Internally the iterator extracts the bytes using {@link #getSlice(int, int)}
      *
      * @param stepSize the step size. must be larger than 0.
-     * @return a new iterator
+     * @since 0.2.0
      */
-    public @NotNull Iterator<List<@Nullable Byte>> rangeIterator(int stepSize) {
+    public BinaryFileProjection<DataSlice> slices(int stepSize) {
         if (stepSize < 1) {
             throw new IllegalArgumentException("stepSize must be greater than zero");
         }
-        return new BinaryFileRangeIterator(this, stepSize);
+        return new BinaryFileProjection<>(() -> new BinaryFileSliceIterator(this, stepSize));
     }
 
 }

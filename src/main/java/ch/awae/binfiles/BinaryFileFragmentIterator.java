@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-class BinaryFileIterator implements Iterator<DataFragment> {
+class BinaryFileFragmentIterator implements Iterator<DataFragment> {
 
     private final @NotNull BinaryFile file;
     private final int stepSize;
@@ -12,7 +12,7 @@ class BinaryFileIterator implements Iterator<DataFragment> {
     private final Queue<DataFragment> queue = new ArrayDeque<>();
     private int nextStart;
 
-    public BinaryFileIterator(@NotNull BinaryFile file, int stepSize) {
+    public BinaryFileFragmentIterator(@NotNull BinaryFile file, int stepSize) {
         this.file = file;
         this.stepSize = stepSize;
         this.fetchNextSegment();

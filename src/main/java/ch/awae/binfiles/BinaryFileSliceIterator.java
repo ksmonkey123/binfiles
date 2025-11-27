@@ -1,18 +1,16 @@
 package ch.awae.binfiles;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.List;
 
-class BinaryFileRangeIterator implements Iterator<List<@Nullable Byte>> {
+class BinaryFileSliceIterator implements Iterator<DataSlice> {
 
     private final @NotNull BinaryFile file;
     private final int stepSize;
     private int nextStart;
 
-    public BinaryFileRangeIterator(@NotNull BinaryFile file, int stepSize) {
+    public BinaryFileSliceIterator(@NotNull BinaryFile file, int stepSize) {
         this.file = file;
         this.stepSize = stepSize;
     }
@@ -23,13 +21,13 @@ class BinaryFileRangeIterator implements Iterator<List<@Nullable Byte>> {
     }
 
     @Override
-    public List<@Nullable Byte> next() {
+    public DataSlice next() {
         if (!hasNext()) {
             return null;
         }
 
         int size = Math.min(stepSize, file.getSizeLimit() - nextStart);
-        var result = file.getRangeOfBytes(nextStart, size);
+        var result = file.getSlice(nextStart, size);
         nextStart = nextStart + stepSize;
         return result;
     }
