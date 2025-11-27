@@ -155,6 +155,30 @@ public class BinaryFile implements Iterable<DataFragment> {
         return fragments;
     }
 
+    /**
+     * Extracts a range of bytes from the requested memory space.
+     * *
+     *
+     * @param start  starting address of the memory space to extract
+     * @param length length of the memory space to extract. must be larger than 0.
+     * @throws IndexOutOfBoundsException if the memory space is "invalid" (any byte outside the range of this file)
+     */
+    public @NotNull List<@Nullable Byte> getRangeOfBytes(int start, int length) {
+        if (length < 1) {
+            throw new IllegalArgumentException("length must be greater than zero");
+        }
+        if (start < 0 || start + length > this.content.getSize()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        List<@Nullable Byte> buffer = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) {
+            buffer.add(content.getOrNull(start + i));
+        }
+
+        return buffer;
+    }
+
     private static @NotNull DataFragment buildFragment(int start, @NotNull List<@NotNull Byte> data) {
         byte[] bytes = new byte[data.size()];
         for (int i = 0; i < data.size(); i++) {
@@ -179,7 +203,7 @@ public class BinaryFile implements Iterable<DataFragment> {
      * @see #iterator(int)
      */
     @Override
-    public @NotNull Iterator<@NotNull DataFragment> iterator() {
+    public @NotNull Iterator<DataFragment> iterator() {
         return new BinaryFileIterator(this, 64);
     }
 
@@ -196,10 +220,28 @@ public class BinaryFile implements Iterable<DataFragment> {
      * @param stepSize the step size. must be larger than 0.
      * @return a new iterator
      */
-    public @NotNull Iterator<@NotNull DataFragment> iterator(int stepSize) {
+    public @NotNull Iterator<DataFragment> iterator(int stepSize) {
         if (stepSize < 1) {
             throw new IllegalArgumentException("stepSize must be greater than zero");
         }
         return new BinaryFileIterator(this, stepSize);
     }
+
+    /**
+     * Returns an iterator iterating over address ranges. Instead of continuous fragments, like {@link #iterator(int)},
+     * this iterator provides a list of nullable bytes.
+     * <p>
+     * Internally the iterator calls {@link #getRangeOfBytes(int, int)} repeatedly an returns the resulting lists one by
+     * one.
+     *
+     * @param stepSize the step size. must be larger than 0.
+     * @return a new iterator
+     */
+    public @NotNull Iterator<List<@Nullable Byte>> rangeIterator(int stepSize) {
+        if (stepSize < 1) {
+            throw new IllegalArgumentException("stepSize must be greater than zero");
+        }
+        return new BinaryFileRangeIterator(this, stepSize);
+    }
+
 }
