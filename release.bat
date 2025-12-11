@@ -1,3 +1,3 @@
 git fetch --tags
-mvn releaser:release
+call mvn releaser:release
 git push --tags
