@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 class Content {
 
     private final int size;
-    private final byte[] content;
+    private final byte[] byteValues;
     private final BitSet presenceMarkers;
 
     public Content(int size) {
@@ -16,12 +16,12 @@ class Content {
             throw new IllegalArgumentException("size must be between 1 and 65536");
         }
         this.size = size;
-        this.content = new byte[size];
+        this.byteValues = new byte[size];
         this.presenceMarkers = new BitSet(size);
     }
 
     private void validateAddress(int address) {
-        if (address < 0 || address >= content.length) {
+        if (address < 0 || address >= byteValues.length) {
             throw new IndexOutOfBoundsException();
         }
     }
@@ -36,12 +36,12 @@ class Content {
             throw new IllegalStateException("value already present at address " + address);
         }
         presenceMarkers.set(address);
-        content[address] = value;
+        byteValues[address] = value;
     }
 
     public byte get(int address) {
         if (isSet(address)) {
-            return content[address];
+            return byteValues[address];
         } else {
             throw new NoSuchElementException("no value set at address " + address);
         }
@@ -49,7 +49,7 @@ class Content {
 
     public @Nullable Byte getOrNull(int address) {
         if (isSet(address)) {
-            return content[address];
+            return byteValues[address];
         } else {
             return null;
         }

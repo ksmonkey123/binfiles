@@ -8,10 +8,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class BinaryFileSliceIteratorTest {
+class BinaryFileSliceIteratorTest {
 
     @Test
-    public void testStandardIterator() {
+    void testStandardIterator() {
         BinaryFile file = buildFile();
 
         List<DataSlice> slices = file.slices(64).toList();

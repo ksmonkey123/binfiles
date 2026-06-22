@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ContentTest {
+class ContentTest {
 
     @Test
-    public void testEmptyContentHasNothingSet() {
+    void testEmptyContentHasNothingSet() {
         Content content = new Content(64);
 
         for (int i = 0; i < content.getSize(); i++) {
@@ -17,21 +17,21 @@ public class ContentTest {
     }
 
     @Test
-    public void testAccessOutOfBounds() {
+    void testAccessOutOfBounds() {
         Content content = new Content(64);
         assertThrows(IndexOutOfBoundsException.class, () -> content.get(-1));
         assertThrows(IndexOutOfBoundsException.class, () -> content.get(64));
     }
 
     @Test
-    public void testPutOutOfBounds() {
+    void testPutOutOfBounds() {
         Content content = new Content(64);
         assertThrows(IndexOutOfBoundsException.class, () -> content.put(-1, (byte) 1));
         assertThrows(IndexOutOfBoundsException.class, () -> content.put(64, (byte) 1));
     }
 
     @Test
-    public void testSettingData() {
+    void testSettingData() {
         for (int i = 0; i < 64; i++) {
             Content content = new Content(64);
 
@@ -45,7 +45,7 @@ public class ContentTest {
     }
 
     @Test
-    public void testWritesDontCollide() {
+    void testWritesDontCollide() {
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
                 if (i == j) continue;
@@ -59,14 +59,14 @@ public class ContentTest {
     }
 
     @Test
-    public void testSecondWriteCollides() {
+    void testSecondWriteCollides() {
         Content content = new Content(64);
         content.put(1, (byte) 1);
         assertThrows(IllegalStateException.class, () -> content.put(1, (byte) 2));
     }
 
     @Test
-    public void testInitBadSize() {
+    void testInitBadSize() {
         assertThrows(IllegalArgumentException.class, () -> new Content(-1));
         assertThrows(IllegalArgumentException.class, () -> new Content(0));
         assertThrows(IllegalArgumentException.class, () -> new Content(65537));

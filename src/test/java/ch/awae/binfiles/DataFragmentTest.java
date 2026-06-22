@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DataFragmentTest {
+class DataFragmentTest {
 
     @Test
-    public void testConstruction() {
+    void testConstruction() {
         byte[] buffer = new byte[100];
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] = (byte) i;
@@ -30,30 +30,30 @@ public class DataFragmentTest {
     }
 
     @Test
-    public void testFragmentStartOutOfBounds() {
+    void testFragmentStartOutOfBounds() {
         assertThrows(IllegalArgumentException.class, () -> new DataFragment(-1, new byte[100]));
         assertThrows(IllegalArgumentException.class, () -> new DataFragment(65536, new byte[100]));
     }
 
     @Test
-    public void testFragmentEndOutOfBounds() {
+    void testFragmentEndOutOfBounds() {
         assertDoesNotThrow(() -> new DataFragment(0, new byte[65536]));
         assertThrows(IllegalArgumentException.class, () -> new DataFragment(65000, new byte[537]));
     }
 
     @Test
-    public void testEmptyFragment() {
+    void testEmptyFragment() {
         assertThrows(IllegalArgumentException.class, () -> new DataFragment(0, new byte[0]));
     }
 
     @Test
-    public void testNullFragment() {
+    void testNullFragment() {
         //noinspection DataFlowIssue
         assertThrows(NullPointerException.class, () -> new DataFragment(0, null));
     }
 
     @Test
-    public void testFragmentTakesInCopyOfBuffer() {
+    void testFragmentTakesInCopyOfBuffer() {
         byte[] buffer = new byte[16];
         buffer[0] = 12;
         DataFragment fragment = new DataFragment(0, buffer);

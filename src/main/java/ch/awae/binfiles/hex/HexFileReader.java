@@ -123,25 +123,25 @@ public class HexFileReader implements Closeable {
         List<DataFragment> fragments = new ArrayList<>();
 
         while (true) {
-            HexRecord record = recordReader.readNext();
-            if (record == null && fragments.isEmpty()) {
+            HexRecord rec = recordReader.readNext();
+            if (rec == null && fragments.isEmpty()) {
                 // end of stream before file starts, simply close.
                 return null;
-            } else if (record == null) {
+            } else if (rec == null) {
                 // end of stream before file end -> ERROR
                 throw new HexFileParsingException("unexpected end of stream");
             }
 
-            int i = record.type();
-            if (i == 0) {
+            int i = rec.type();
+            switch (i) {
                 // data record. convert to fragment.
-                fragments.add(new DataFragment(record.address(), record.data()));
-            } else if (i == 1) {
+                case 0 -> fragments.add(new DataFragment(rec.address(), rec.data()));
                 // EOF marker
-                return fragments;
-            } else {
+                case 1 -> {
+                    return fragments;
+                }
                 // unsupported record type
-                throw new HexFileParsingException("unsupported record type: " + i);
+                default -> throw new HexFileParsingException("unsupported record type: " + i);
             }
         }
     }

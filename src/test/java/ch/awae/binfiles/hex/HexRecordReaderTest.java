@@ -10,10 +10,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HexRecordReaderTest {
+class HexRecordReaderTest {
 
     @Test
-    public void testStreamProcessing_validSimple() throws IOException {
+    void testStreamProcessing_validSimple() throws IOException {
         List<HexRecord> data = new ArrayList<>();
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_simple.hex");
@@ -26,7 +26,7 @@ public class HexRecordReaderTest {
             }
             // call nr. 5 should return NULL (no more blocks in stream)
             assertNull(reader.readNext());
-            // any further call should return NULL (<EOF>);
+            // any further call should return NULL (<EOF>)
             assertNull(reader.readNext());
         }
 
@@ -51,7 +51,7 @@ public class HexRecordReaderTest {
     }
 
     @Test
-    public void testStreamProcessing_validSuperfluous() throws IOException {
+    void testStreamProcessing_validSuperfluous() throws IOException {
         List<HexRecord> data = new ArrayList<>();
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_with_superfluous_data.hex");
@@ -64,7 +64,7 @@ public class HexRecordReaderTest {
             }
             // call nr. 5 should return NULL (no more blocks in stream)
             assertNull(reader.readNext());
-            // any further call should return NULL (<EOF>);
+            // any further call should return NULL (<EOF>)
             assertNull(reader.readNext());
         }
 
@@ -89,7 +89,7 @@ public class HexRecordReaderTest {
     }
 
     @Test
-    public void testStreamProcessing_invalidChecksum() throws IOException {
+    void testStreamProcessing_invalidChecksum() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/invalid_checksum.hex");
                 HexRecordReader reader = new HexRecordReader(stream)
@@ -112,7 +112,7 @@ public class HexRecordReaderTest {
     }
 
     @Test
-    public void testStreamProcessing_invalidCorrupt() throws IOException {
+    void testStreamProcessing_invalidCorrupt() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/invalid_corrupt.hex");
                 HexRecordReader reader = new HexRecordReader(stream)
@@ -127,13 +127,13 @@ public class HexRecordReaderTest {
     }
 
     @Test
-    public void testStreamProcessing_IOException() throws IOException {
+    void testStreamProcessing_IOException() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_simple.hex");
                 HexRecordReader reader = new HexRecordReader(stream)
         ) {
             // read first block
-            HexRecord data = reader.readNext();
+            reader.readNext();
             // close stream. this should cause an IO Exception at the next read call
             stream.close();
             assertThrows(IOException.class, reader::readNext);
@@ -142,21 +142,21 @@ public class HexRecordReaderTest {
     }
 
     @Test
-    public void testReaderInitNullStream() {
+    void testReaderInitNullStream() {
         assertThrows(NullPointerException.class, () -> new HexRecordReader(null));
     }
 
     @Test
-    public void testReadingSingleRecord() throws IOException {
+    void testReadingSingleRecord() throws IOException {
         InputStream stream = new ByteArrayInputStream(":0812340001020304050607088E".getBytes());
         HexRecordReader reader = new HexRecordReader(stream);
-        HexRecord record = reader.readNext();
+        HexRecord rec = reader.readNext();
 
-        assertEquals(0, record.type());
-        assertEquals(0x1234, record.address());
-        assertEquals(8, record.data().length);
+        assertEquals(0, rec.type());
+        assertEquals(0x1234, rec.address());
+        assertEquals(8, rec.data().length);
         for (int i = 0; i < 8; i++) {
-            assertEquals(i + 1, record.data()[i]);
+            assertEquals(i + 1, rec.data()[i]);
         }
     }
 }

@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 public class HexRecordWriter implements Closeable {
 
-    private final static HexFormat HEX_FORMAT = HexFormat.of().withUpperCase();
+    private static final HexFormat HEX_FORMAT = HexFormat.of().withUpperCase();
     private final OutputStream stream;
     private final byte[] separator;
 
@@ -95,19 +95,19 @@ public class HexRecordWriter implements Closeable {
     /**
      * Writes a {@link HexRecord} to the stream, followed by the configured separator sequence.
      *
-     * @param record The record to write. May not be null.
+     * @param rec The record to write. May not be null.
      * @throws IOException Any I/O exception occurs in the underlying stream.
      */
-    public void write(@NotNull HexRecord record) throws IOException {
-        Objects.requireNonNull(record, "record must not be null");
-        byte[] data = record.data();
+    public void write(@NotNull HexRecord rec) throws IOException {
+        Objects.requireNonNull(rec, "record must not be null");
+        byte[] data = rec.data();
 
         String output = ":"
                 + HEX_FORMAT.toHexDigits((byte) data.length)
-                + HEX_FORMAT.toHexDigits((short) record.address())
-                + HEX_FORMAT.toHexDigits((byte) record.type())
+                + HEX_FORMAT.toHexDigits((short) rec.address())
+                + HEX_FORMAT.toHexDigits((byte) rec.type())
                 + HEX_FORMAT.formatHex(data)
-                + HEX_FORMAT.toHexDigits((byte) record.calculateChecksum());
+                + HEX_FORMAT.toHexDigits((byte) rec.calculateChecksum());
 
         stream.write(output.getBytes(StandardCharsets.US_ASCII));
         if (separator != null) {

@@ -7,10 +7,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BinaryFileTest {
+class BinaryFileTest {
 
     @Test
-    public void testEmptyFileCreation() {
+    void testEmptyFileCreation() {
         BinaryFile file = new BinaryFile();
         assertEquals(0, file.getCurrentSize());
         for (int i = 0; i < 65536; i++) {
@@ -19,7 +19,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testAddingFragments() {
+    void testAddingFragments() {
         BinaryFile file = new BinaryFile();
 
         DataFragment fragment = new DataFragment(100, new byte[]{12, 13, 14, 15});
@@ -37,7 +37,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testAddingCollidingFragments() {
+    void testAddingCollidingFragments() {
         BinaryFile file = new BinaryFile();
 
         DataFragment fragment1 = new DataFragment(100, new byte[]{12, 13, 14, 15});
@@ -47,7 +47,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testAddingNonCollidingFragments() {
+    void testAddingNonCollidingFragments() {
         BinaryFile file = new BinaryFile();
 
         DataFragment fragment1 = new DataFragment(100, new byte[]{12, 13, 14, 15});
@@ -67,7 +67,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testFragmentConstructor() {
+    void testFragmentConstructor() {
         DataFragment fragment1 = new DataFragment(100, new byte[]{12, 13, 14, 15});
         DataFragment fragment2 = new DataFragment(104, new byte[]{22, 23, 24, 25});
 
@@ -85,7 +85,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testEmptyFragmentExtraction() {
+    void testEmptyFragmentExtraction() {
         BinaryFile file = new BinaryFile();
 
         List<@NotNull DataFragment> fragments = file.getFragments(32, 64);
@@ -94,7 +94,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testDenseFragmentExtraction() {
+    void testDenseFragmentExtraction() {
         DataFragment fragment1 = new DataFragment(100, new byte[]{12, 13, 14, 15});
         DataFragment fragment2 = new DataFragment(104, new byte[]{22, 23, 24, 25});
 
@@ -116,7 +116,7 @@ public class BinaryFileTest {
     }
 
     @Test
-    public void testSparseFragmentExtraction() {
+    void testSparseFragmentExtraction() {
         DataFragment fragment1 = new DataFragment(100, new byte[]{12, 13, 14, 15});
         DataFragment fragment2 = new DataFragment(105, new byte[]{23, 24, 25});
 

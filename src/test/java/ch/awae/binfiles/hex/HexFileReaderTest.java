@@ -9,10 +9,10 @@ import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HexFileReaderTest {
+class HexFileReaderTest {
 
     @Test
-    public void testReadSimpleFile() throws IOException {
+    void testReadSimpleFile() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_simple.hex");
                 HexFileReader reader = new HexFileReader(stream)
@@ -26,7 +26,7 @@ public class HexFileReaderTest {
     }
 
     @Test
-    public void testReadFileWithSuperfluousData() throws IOException {
+    void testReadFileWithSuperfluousData() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_with_superfluous_data.hex");
                 HexFileReader reader = new HexFileReader(stream)
@@ -40,7 +40,7 @@ public class HexFileReaderTest {
     }
 
     @Test
-    public void testReadFileCorrupt() throws IOException {
+    void testReadFileCorrupt() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/invalid_corrupt.hex");
                 HexFileReader reader = new HexFileReader(stream)
@@ -53,7 +53,7 @@ public class HexFileReaderTest {
     }
 
     @Test
-    public void testReadFileMoreAfterEOF() throws IOException {
+    void testReadFileMoreAfterEOF() throws IOException {
         try (
                 InputStream stream = this.getClass().getResourceAsStream("/ch/awae/binfiles/hex/valid_with_more_after_eof.hex");
                 HexFileReader reader = new HexFileReader(stream)
@@ -69,17 +69,17 @@ public class HexFileReaderTest {
     }
 
     @Test
-    public void testInitNullReader() {
+    void testInitNullReader() {
         assertThrows(NullPointerException.class, () -> new HexFileReader((HexRecordReader) null));
     }
 
     @Test
-    public void testInitNullStream() {
+    void testInitNullStream() {
         assertThrows(NullPointerException.class, () -> new HexFileReader((InputStream) null));
     }
 
     @Test
-    public void testIOException() throws IOException {
+    void testIOException() throws IOException {
         HexRecordReader mockReader = Mockito.mock(HexRecordReader.class);
 
         Mockito.when(mockReader.readNext()).thenThrow(new IOException());

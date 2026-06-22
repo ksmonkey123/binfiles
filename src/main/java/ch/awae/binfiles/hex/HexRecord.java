@@ -68,7 +68,7 @@ public record HexRecord(int type, int address, byte[] data) {
     public int calculateChecksum() {
         int sum = data.length + (address & 0xff) + ((address >>> 8) & 0xff) + type;
         for (byte x : data) {
-            sum += ((int) x) & 0xff;
+            sum += x & 0xff;
         }
         return (0x100 - (sum & 0xff)) & 0xff;
     }

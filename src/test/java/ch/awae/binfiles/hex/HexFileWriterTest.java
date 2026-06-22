@@ -9,10 +9,10 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HexFileWriterTest {
+class HexFileWriterTest {
 
     @Test
-    public void testWrite8() throws IOException {
+    void testWrite8() throws IOException {
         BinaryFile file = new BinaryFile();
         file.addFragment(new DataFragment(0, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
         file.addFragment(new DataFragment(8, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
@@ -35,7 +35,7 @@ public class HexFileWriterTest {
     }
 
     @Test
-    public void testWrite16() throws IOException {
+    void testWrite16() throws IOException {
         BinaryFile file = new BinaryFile();
         file.addFragment(new DataFragment(0, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
         file.addFragment(new DataFragment(8, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
@@ -56,7 +56,7 @@ public class HexFileWriterTest {
     }
 
     @Test
-    public void testWrite32() throws IOException {
+    void testWrite32() throws IOException {
         BinaryFile file = new BinaryFile();
         file.addFragment(new DataFragment(0, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));
         file.addFragment(new DataFragment(8, new byte[]{1, 2, 3, 4, 5, 6, 7, 8}));

@@ -8,10 +8,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BinaryFileFragmentIteratorTest {
+class BinaryFileFragmentIteratorTest {
 
     @Test
-    public void testStandardIterator() {
+    void testStandardIterator() {
         BinaryFile file = buildFile();
 
         // evaluate
@@ -53,7 +53,7 @@ public class BinaryFileFragmentIteratorTest {
     }
 
     @Test
-    public void testIteratorOverspansFile() {
+    void testIteratorOverspansFile() {
         BinaryFile file = new BinaryFile(16);
 
         for (int i = 0; i < 16; i++) {
