@@ -37,7 +37,7 @@ class BinaryFileFragmentIterator implements Iterator<DataFragment> {
     }
 
     /**
-     * searches for the next segment and puts it into the queue.
+     * Searches for the next segment and puts it into the queue.
      * If we reach the end of the file without finding a segment, we return without adding
      * anything into the queue!
      */

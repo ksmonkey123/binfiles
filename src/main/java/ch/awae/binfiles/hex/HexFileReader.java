@@ -119,7 +119,7 @@ public class HexFileReader implements Closeable {
         return new BinaryFile(fileSize, fragments);
     }
 
-    private List<DataFragment> collectFileFragments() throws IOException {
+    private @Nullable List<DataFragment> collectFileFragments() throws IOException {
         List<DataFragment> fragments = new ArrayList<>();
 
         while (true) {

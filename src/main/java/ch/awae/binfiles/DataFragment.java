@@ -10,7 +10,7 @@ import java.util.Objects;
  * A continuous block of binary data with an absolute position in the address space.
  * <p>
  * A {@code DataFragment} is different from a {@link DataSlice} in that a {@code DataFragment} must be continuous
- * (i.e. may not contain any gaps), while a{@code DataSlice} may be discontinuous. (i.e. may contain "gaps")
+ * (i.e., may not contain any gaps), while a{@code DataSlice} may be discontinuous. (i.e., may contain "gaps")
  *
  * @author Andreas Wälchli
  * @since 0.1.0
@@ -58,9 +58,9 @@ public class DataFragment {
     /**
      * Returns a <b>copy</b> of the data contained in the fragment.
      * <p>
-     * Please note, that every invocation returns a fresh copy!
+     * Please note that every invocation returns a fresh copy!
      *
-     * @return a copy of the fragments data
+     * @return a copy of the fragment data
      */
     @Contract("-> new")
     public byte @NotNull [] getData() {

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A representation of a binary data file with a size of up to 65536 bytes (16-bit address space).
+ * A representation of a binary data file with a size of up to 65,536 bytes (16-bit address space).
  *
  * @author Andreas Wälchli
  * @since 0.1.0
@@ -19,23 +19,23 @@ public class BinaryFile {
     private int currentSize = 0;
 
     /**
-     * Creates a new empty file with a max size of 65536 bytes.
+     * Creates a new empty file with a max size of 65,536 bytes.
      */
     public BinaryFile() {
         this(65536);
     }
 
     /**
-     * Creates a new empty file with a size limit of 65536 bytes.
+     * Creates a new empty file with a size limit of 65,536 bytes.
      *
-     * @param sizeLimit the max size of the file. must be between 1 and 65536.
+     * @param sizeLimit the max size of the file. must be between 1 and 65,536.
      */
     public BinaryFile(int sizeLimit) {
         this.content = new Content(sizeLimit);
     }
 
     /**
-     * Creates a new file with a size limit of 65536 bytes and initializes it with the provided fragments.
+     * Creates a new file with a size limit of 65,536 bytes and initializes it with the provided fragments.
      *
      * @param fragments the fragments to add
      * @throws IllegalStateException if any of the fragments are "colliding" with each other.
@@ -47,7 +47,7 @@ public class BinaryFile {
     /**
      * Creates a new file with a given size limit and initializes it with the provided fragments.
      *
-     * @param sizeLimit the max size of the file. must be between 1 and 65536.
+     * @param sizeLimit the max size of the file. must be between 1 and 65,536.
      * @param fragments the fragments to add
      * @throws IllegalStateException     if any of the fragments are "colliding" with each other.
      * @throws IndexOutOfBoundsException if any fragment does not fit into this file.
@@ -197,7 +197,7 @@ public class BinaryFile {
     }
 
     /**
-     * Returns an iterable "projection" of this file, that separates the file into continuous data fragments.
+     * Returns an iterable "projection" of this file that separates the file into continuous data fragments.
      * <p>
      * The provided iterator goes over the file with the set step size.
      * If one "slice" is not representable in a single fragment, the iterator will provide multiple smaller fragments

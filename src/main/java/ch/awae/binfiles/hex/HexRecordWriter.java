@@ -36,7 +36,7 @@ public class HexRecordWriter implements Closeable {
      * @param separator The separator byte sequence to be written at the end of every record.
      *                  May not contain the byte value 58 (0x3A / ':'). May be null.
      * @apiNote The byte value 58 is forbidden in the separator, as this is the <em>record mark</em>,
-     * i.e. the starting byte of a new record.
+     * i.e., the starting byte of a new record.
      * @implNote Internally a <b>copy</b> of the provided separator is stored. This ensured immutability.
      */
     public HexRecordWriter(@NotNull OutputStream stream, byte @Nullable [] separator) {
@@ -67,7 +67,7 @@ public class HexRecordWriter implements Closeable {
      * @param separator The separator string to be written at the end of every record.
      *                  May not contain the character ':'. May be null.
      * @apiNote The character ':' is forbidden in the separator as this is the <em>record mark</em>,
-     * i.e. the starting byte of a new record.
+     * i.e., the starting byte of a new record.
      */
     public HexRecordWriter(@NotNull OutputStream stream, @Nullable String separator) {
         this.stream = Objects.requireNonNull(stream);

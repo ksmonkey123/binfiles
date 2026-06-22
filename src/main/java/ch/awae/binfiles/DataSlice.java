@@ -15,7 +15,7 @@ import java.util.Objects;
  * It is possible that not addresses have a set value.
  * <p>
  * A {@code DataSlice} is different from a {@link DataFragment} in that a {@code DataSlice} may be discontinuous
- * (i.e. may contain "gaps"), while a {@code DataFragment} must be continuous. (i.e. may not contain any gaps)
+ * (i.e., may contain "gaps"), while a {@code DataFragment} must be continuous. (i.e., may not contain any gaps)
  *
  * @author Andreas Wälchli
  * @since 0.2.0
@@ -29,12 +29,12 @@ public class DataSlice {
     /**
      * Creates a new instance.
      *
-     * @param startAddress the starting address of the slice. must be in the 16-bit address range (0 - 65535)
+     * @param startAddress the starting address of the slice. must be in the 16-bit address range (0 - 65,535)
      * @param data         the data of the slice. A read-only copy of the provided list is created internally.
      *                     Must contain at least 1 element.
-     * @throws IllegalArgumentException if the startAddress or data is invalid or the entire data does not fit into the
+     * @throws IllegalArgumentException if the startAddress or data is invalid, or the entire data does not fit into the
      *                                  16-bit address range. (The effective address of the last byte of data is above
-     *                                  65535.)
+     *                                  65,535.)
      */
     public DataSlice(int startAddress, @NotNull List<@Nullable Byte> data) {
         this.data = Collections.unmodifiableList(new ArrayList<>(Objects.requireNonNull(data, "data must not be null")));
