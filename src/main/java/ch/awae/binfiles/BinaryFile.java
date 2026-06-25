@@ -26,6 +26,33 @@ public class BinaryFile {
     }
 
     /**
+     * Creates a new file with the given data.
+     * <p>
+     * The size of the file is the same as the size of the given data.
+     *
+     * @since 0.2.5
+     */
+    public BinaryFile(byte @NotNull [] data) {
+        this(data.length, data);
+    }
+
+    /**
+     * Creates a new file with the given size limit and initializes it with the provided data.
+     *
+     * @param sizeLimit the max size of the file. must be between 1 and 65,536.
+     * @param data      the data to add to the start of the file
+     * @throws IndexOutOfBoundsException if the data does not fit into the file.
+     * @since 0.2.5
+     */
+    public BinaryFile(int sizeLimit, byte @NotNull [] data) {
+        this(sizeLimit);
+
+        for (int i = 0; i < data.length; i++) {
+            this.addByte(i, data[i]);
+        }
+    }
+
+    /**
      * Creates a new empty file with a size limit of 65,536 bytes.
      *
      * @param sizeLimit the max size of the file. must be between 1 and 65,536.

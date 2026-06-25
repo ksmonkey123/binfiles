@@ -140,4 +140,44 @@ class BinaryFileTest {
         assertEquals(23, d2[0]);
     }
 
+    @Test
+    void testFileFromByteArray() {
+        byte[] bytes = {1, 2, 3, 4};
+
+        BinaryFile file = new BinaryFile(bytes);
+
+        assertEquals(4, file.getCurrentSize());
+        assertEquals(4, file.getSizeLimit());
+
+        for (int i = 0; i < bytes.length; i++) {
+            assertEquals(bytes[i], file.getByte(i));
+        }
+    }
+
+    @Test
+    void testFileFromByteArrayLargerLimit() {
+        byte[] bytes = {1, 2, 3, 4};
+
+        BinaryFile file = new BinaryFile(8, bytes);
+
+        assertEquals(4, file.getCurrentSize());
+        assertEquals(8, file.getSizeLimit());
+
+        assertEquals((byte) 1, file.getByte(0));
+        assertEquals((byte) 2, file.getByte(1));
+        assertEquals((byte) 3, file.getByte(2));
+        assertEquals((byte) 4, file.getByte(3));
+        assertNull(file.getByte(4));
+        assertNull(file.getByte(5));
+        assertNull(file.getByte(6));
+        assertNull(file.getByte(7));
+    }
+
+    @Test
+    void testFileFromByteArraySmallerLimit() {
+        byte[] bytes = {1, 2, 3, 4};
+
+        assertThrows(IndexOutOfBoundsException.class, () -> new BinaryFile(3, bytes));
+    }
+
 }
